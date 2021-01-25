@@ -1,18 +1,14 @@
 const path = require('path');
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 
 module.exports = {
+  mode: "development",
   entry: {
-    main: "./dist/src/main.js",
+    main: "./lib/main.js",
   },
   output: {
-    path: path.join(__dirname, 'build'),
+    path: path.join(__dirname, 'dist'),
     filename: '[name]-bundle.js',
   },
-  plugins: [
-    new CopyWebpackPlugin([
-      {
-        from: './html',
-      }
-    ]),
-  ],
+  plugins: [new CopyWebpackPlugin({ patterns: [{ from: "./html" }] })],
 };

@@ -1,14 +1,15 @@
-const path = require('path');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
+const path = require("path");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
+const BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
 
 module.exports = {
   mode: "development",
   devtool: "inline-source-map",
   entry: {
-    main: "./ts/src/main.ts",
+    main: "./src/main.ts",
   },
   output: {
-    path: path.resolve(__dirname, 'build'),
+    path: path.resolve(__dirname, "dist"),
     filename: "[name]-bundle.js",
   },
   resolve: {
@@ -21,11 +22,23 @@ module.exports = {
       { test: /\.tsx?$/, loader: "ts-loader" },
     ],
   },
+  optimization: {
+    splitChunks: {
+      // include all types of chunks
+      chunks: 'async',
+      minSize: 1
+    }
+  },
   plugins: [
-    new CopyWebpackPlugin([
+    new CopyWebpackPlugin(
       {
-        from: './html',
+        patterns: [{ from: "./html" }] 
       }
-    ]),
+    ), 
+    new BundleAnalyzerPlugin({
+      analyzerMode: 'static',
+      reportFilename: 'webpack.report.html',
+      openAnalyzer: false
+    })
   ],
 };
