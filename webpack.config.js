@@ -1,4 +1,5 @@
 const path = require("path");
+const webpack = require('webpack');
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
 
@@ -25,7 +26,7 @@ module.exports = {
   optimization: {
     splitChunks: {
       // include all types of chunks
-      chunks: 'async',
+      chunks: 'all',
       minSize: 1
     }
   },
@@ -38,7 +39,12 @@ module.exports = {
     new BundleAnalyzerPlugin({
       analyzerMode: 'static',
       reportFilename: 'webpack.report.html',
-      openAnalyzer: false
-    })
+      openAnalyzer: false,
+      generateStatsFile: true
+    }),
+    // This code will force the output of one chunk only
+    // new webpack.optimize.LimitChunkCountPlugin({
+    //   maxChunks: 1,
+    // }),
   ],
 };
